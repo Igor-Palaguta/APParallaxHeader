@@ -66,8 +66,11 @@ static char UIScrollViewParallaxView;
    if (!self.parallaxView)
       return;
 
-   BOOL shouldAdjustOffset = self.parallaxHeight <= -self.contentOffset.y;
-   self.parallaxView.frame = CGRectMake(0.f, 0.f, self.parallaxView.frame.size.width, height);
+   if (self.parallaxView.parallaxHeight == height)
+      return;
+
+   BOOL shouldAdjustOffset = height < -self.contentOffset.y;
+   self.parallaxView.frame = CGRectMake(0.f, -height, self.parallaxView.frame.size.width, height);
 
    self.parallaxView.parallaxHeight = height;
 
