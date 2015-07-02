@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, APParallaxTrackingState) {
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIView *currentSubView;
 @property (nonatomic, strong) APParallaxShadowView *shadowView;
+@property (nonatomic, assign) CGFloat minimumHeight;
 
 - (id)initWithFrame:(CGRect)frame andShadow:(BOOL)shadow;
 

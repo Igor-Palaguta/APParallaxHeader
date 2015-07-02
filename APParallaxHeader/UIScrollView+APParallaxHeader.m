@@ -104,6 +104,7 @@ static char UIScrollViewParallaxView;
     {
         APParallaxView *parallaxView = [[APParallaxView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, height)];
         [parallaxView setClipsToBounds:YES];
+        view.frame = parallaxView.bounds;
         [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
         [parallaxView addSubview:view];
         
@@ -266,20 +267,18 @@ static char UIScrollViewParallaxView;
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     // We do not want to track when the parallax view is hidden
-    if (contentOffset.y > 0) {
+    if (contentOffset.y > 0 && self.minimumHeight == 0) {
         [self setState:APParallaxTrackingInactive];
     } else {
         [self setState:APParallaxTrackingActive];
     }
-    
+
     if(self.state == APParallaxTrackingActive) {
-        CGFloat yOffset = contentOffset.y*-1;
         if ([self.delegate respondsToSelector:@selector(parallaxView:willChangeFrame:)]) {
             [self.delegate parallaxView:self willChangeFrame:self.frame];
         }
         
-        [self setFrame:CGRectMake(0, contentOffset.y, CGRectGetWidth(self.frame), yOffset)];
-        
+        [self setFrame:CGRectMake(0, contentOffset.y, CGRectGetWidth(self.bounds), fmax(-contentOffset.y,self.minimumHeight))];
         if ([self.delegate respondsToSelector:@selector(parallaxView:didChangeFrame:)]) {
             [self.delegate parallaxView:self didChangeFrame:self.frame];
         }
